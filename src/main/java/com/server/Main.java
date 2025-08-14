@@ -16,10 +16,33 @@ public class Main {
             FileInputStream fis = new FileInputStream(messageFile);
 
             byte[] byteToBeRead = new byte[8];
+            StringBuilder strbLine = new StringBuilder();
             
 
             while (fis.read(byteToBeRead) != -1) {
-                System.out.println(String.format("Read : %s", new String(byteToBeRead)));
+                
+                StringBuilder bytesOf8Strb = new StringBuilder(new String(byteToBeRead));
+                
+                int indexOfNextLine = bytesOf8Strb.toString().indexOf("\n");
+                
+                if (indexOfNextLine == -1) {
+                    strbLine.append(bytesOf8Strb.toString());
+                    continue;
+                }
+
+                while (true) {
+                    strbLine.append(bytesOf8Strb.substring(0, indexOfNextLine + 1));
+                    System.out.print(strbLine.toString());
+                    strbLine = new StringBuilder();
+                    bytesOf8Strb.delete(0, indexOfNextLine + 1);
+
+                    indexOfNextLine = bytesOf8Strb.toString().indexOf("\n");
+
+                    if (indexOfNextLine == -1) {
+                        strbLine.append(bytesOf8Strb.substring(0));
+                        break;
+                    }
+                }
 
             }
 
